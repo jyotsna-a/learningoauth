@@ -14,7 +14,7 @@ const session_secret = process.env.SESSION_SECRET;
 
 
 const path = require('path');
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, 'client')));
 
 
 app.get('/', (req, res) => {
