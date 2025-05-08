@@ -12,6 +12,11 @@ const client_secret = process.env.GOOGLE_CLIENT_SECRET;
 const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URL;
 const session_secret = process.env.SESSION_SECRET;
 
+
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../client')));
+
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
@@ -65,7 +70,14 @@ app.get('/oauth2callback', async (req, res) => {
   });
 
   req.session.user = userinfo.data;
-  res.redirect('/dashboard');
+  res.redirect('/dashboard.html');
+});
+
+app.get('/me', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: 'Not logged in' });
+  }
+  res.json(req.session.user);
 });
 
 app.get('/dashboard', (req, res) => {

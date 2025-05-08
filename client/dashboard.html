@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Dashboard</h1>
+    <button onclick="logout()">Logout</button>
+
+    <div id="user-info"></div>
+
+    <script>
+      function logout() {
+        fetch('/logout').then(() => {
+          window.location.href = '/';
+        });
+      }
+
+      fetch('/me')
+        .then(res => {
+          if (!res.ok) throw new Error('Not logged in');
+          return res.json();
+        })
+        .then(user => {
+            document.getElementById('user-info').innerHTML = `
+            <div class="animated-welcome">
+                <h2>Hello, ${user.name}</h2>
+                <img src="${user.picture}" alt="Profile picture" />
+                <p>Email: ${user.email}</p>
+            </div>
+            `;
+        })
+        .catch(() => {
+          window.location.href = '/';
+        });
+    </script>
+  </body>
+</html>
