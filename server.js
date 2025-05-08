@@ -42,6 +42,8 @@ app.get('/auth/google', (req, res) => {
   res.redirect(authUrl);
 });
 
+app.set('trust proxy', 1);
+
 app.use(cookieParser());
 
 app.use(session({
