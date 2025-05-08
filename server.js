@@ -9,8 +9,12 @@ const cookieParser = require('cookie-parser');
 
 const client_id = process.env.GOOGLE_CLIENT_ID;
 const client_secret = process.env.GOOGLE_CLIENT_SECRET;
-const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URL;
 const session_secret = process.env.SESSION_SECRET;
+const isProd = process.env.NODE_ENV === 'production';
+
+const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URL 
+                      || 'http://localhost:3000/oauth2callback';
+
 
 
 const path = require('path');
@@ -44,7 +48,11 @@ app.use(session({
   secret: session_secret,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // set to true if using HTTPS
+  cookie: {
+    secure: isProd,           // send cookie only over HTTPS in production
+    httpOnly: true,           // prevents JS access to the cookie
+    sameSite: isProd ? 'strict' : 'lax'
+  }
 }));
 
 // Extract code from Google redirect
