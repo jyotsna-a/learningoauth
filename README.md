@@ -1,1 +1,1 @@
-![oauth flow](./oauthflow)
+![oauth flow](./oauthflow.png)
